@@ -22,15 +22,16 @@ public class NewFrameCallback implements FrameCallback {
     @Override
     public void doFrame(long frameTimeNanos) {
         long diff = (frameTimeNanos - lastUpdate);
-        Log.d(TAG, "lastUpdate = " + lastUpdate);
-        Log.d(TAG, "frameTimeNanos = " + frameTimeNanos);
-        Log.d(TAG, "Diff = " + diff);
-        if( diff > jankLimitInNano ) {
+        if(diff > jankLimitInNano) {
+//            Log.d(TAG, "lastUpdate = " + lastUpdate);
+//            Log.d(TAG, "frameTimeNanos = " + frameTimeNanos);
+//            Log.d(TAG, "Diff = " + diff);
             Log.d(TAG, "Frame drops");
         }
         else {
             Log.d(TAG, "Frame goes well");
         }
+        Log.d(TAG, "FPS = " + 1000000000.0d/diff);
         lastUpdate = frameTimeNanos;
         choreographer.postFrameCallback(NewFrameCallback.this);
     }
