@@ -2,7 +2,6 @@ package kuei.bula.myapplication;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Choreographer;
 import android.view.Menu;
 import android.view.MenuItem;
 
