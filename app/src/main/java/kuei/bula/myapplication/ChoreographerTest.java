@@ -2,6 +2,7 @@ package kuei.bula.myapplication;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Choreographer;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,6 +13,7 @@ public class ChoreographerTest extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choreographer_test);
+        NewFrameCallback callback = new NewFrameCallback();
     }
 
     @Override
