@@ -6,13 +6,15 @@ package kuei.bula.myapplication;
 import android.util.Log;
 import android.view.Choreographer;
 import android.view.Choreographer.FrameCallback;
+import android.widget.Chronometer;
+import android.widget.TextView;
 
 public class NewFrameCallback implements FrameCallback {
     private long lastUpdate = 0;
     private final long jankLimitInNano = 16666666; // 16.67 ms for 60 fps
     private String TAG;
     private Choreographer choreographer;
-
+    private int droppedFrame = 0;
     public NewFrameCallback() {
         TAG = NewFrameCallback.class.getName();
         choreographer = Choreographer.getInstance();
@@ -27,11 +29,15 @@ public class NewFrameCallback implements FrameCallback {
 //            Log.d(TAG, "frameTimeNanos = " + frameTimeNanos);
 //            Log.d(TAG, "Diff = " + diff);
             Log.d(TAG, "Frame drops");
+            ChoreographerTest.SELF.getFrameDroppingField().setText("" + droppedFrame + " drops");
+            droppedFrame++;
         }
         else {
             Log.d(TAG, "Frame goes well");
         }
-        Log.d(TAG, "FPS = " + 1000000000.0d/diff);
+        String fps = "FPS = " + String.valueOf(1000000000.0d/diff).substring(0, 6);
+        Log.d(TAG, fps);
+        ChoreographerTest.SELF.getFpsField().setText(fps);
         lastUpdate = frameTimeNanos;
         choreographer.postFrameCallback(NewFrameCallback.this);
     }

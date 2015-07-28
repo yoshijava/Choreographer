@@ -4,15 +4,36 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 
 public class ChoreographerTest extends Activity {
+
+    public static ChoreographerTest SELF;
+    TextView fpsField;
+    TextView dropField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choreographer_test);
+        SELF = this;
         NewFrameCallback callback = new NewFrameCallback();
+        fpsField = (TextView) findViewById(R.id.FpsField);
+        dropField = (TextView) findViewById(R.id.dropField);
+
+    }
+
+    public TextView getFpsField() {
+        return fpsField;
+    }
+
+    public TextView getDroppingField() {
+        return dropField;
+    }
+
+    public TextView getFrameDroppingField() {
+        return (TextView) findViewById(R.id.dropField);
     }
 
     @Override
