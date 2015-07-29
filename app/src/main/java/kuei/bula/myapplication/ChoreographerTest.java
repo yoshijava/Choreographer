@@ -2,38 +2,31 @@ package kuei.bula.myapplication;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 
-public class ChoreographerTest extends Activity {
+public class ChoreographerTest extends Activity implements Runnable {
 
+    public static Object lock = new Object();
     public static ChoreographerTest SELF;
-    TextView fpsField;
-    TextView dropField;
+    private TextView fpsField;
+    private TextView dropField;
+    private Handler mHandler;
+    private NewFrameCallback callback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choreographer_test);
         SELF = this;
-        NewFrameCallback callback = new NewFrameCallback();
+        callback = new NewFrameCallback();
         fpsField = (TextView) findViewById(R.id.FpsField);
         dropField = (TextView) findViewById(R.id.dropField);
-
-    }
-
-    public TextView getFpsField() {
-        return fpsField;
-    }
-
-    public TextView getDroppingField() {
-        return dropField;
-    }
-
-    public TextView getFrameDroppingField() {
-        return (TextView) findViewById(R.id.dropField);
+        mHandler = new Handler();
+        mHandler.post(this);
     }
 
     @Override
@@ -57,4 +50,14 @@ public class ChoreographerTest extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void run() {
+        String fps = callback.getFPS();
+        int droppedFrame = callback.getDroppedFrame();
+        dropField.setText(droppedFrame + " drops");
+        fpsField.setText("FPS = " + fps);
+        mHandler.postDelayed(this, NewFrameCallback.JANK_LIMIT_IN_NANO /1000000);
+    }
+
 }
