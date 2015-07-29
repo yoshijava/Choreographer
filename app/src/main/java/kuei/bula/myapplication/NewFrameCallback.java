@@ -27,10 +27,10 @@ public class NewFrameCallback implements FrameCallback {
     @Override
     public void doFrame(long frameTimeNanos) {
         long diff = (frameTimeNanos - lastUpdate);
+        Log.d(TAG, "lastUpdate = " + lastUpdate);
+        Log.d(TAG, "frameTimeNanos = " + frameTimeNanos);
+        Log.d(TAG, "Diff = " + diff);
         if(diff > JANK_LIMIT_IN_NANO) {
-            Log.d(TAG, "lastUpdate = " + lastUpdate);
-            Log.d(TAG, "frameTimeNanos = " + frameTimeNanos);
-            Log.d(TAG, "Diff = " + diff);
             Log.d(TAG, "Frame drops");
             droppedFrame++;
         }
