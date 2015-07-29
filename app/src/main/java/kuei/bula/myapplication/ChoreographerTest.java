@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
 
 public class ChoreographerTest extends Activity implements Runnable {
 
@@ -16,8 +18,9 @@ public class ChoreographerTest extends Activity implements Runnable {
     private TextView dropField;
     private Handler mHandler;
     private NewFrameCallback callback;
-    private int frameDropped;
-    private String fps = "";
+    private int frameDropped = 0;
+    private double fps = 0;
+    private DecimalFormat dec = new DecimalFormat("#.00");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,15 +58,17 @@ public class ChoreographerTest extends Activity implements Runnable {
 
     @Override
     public void run() {
-        String fps = callback.getFPS();
+        double fps = callback.getFPS();
         int frameDropped = callback.getDroppedFrame();
-        if(!this.fps.equals(fps)) {
+        if( this.frameDropped == frameDropped) {
             dropField.setText(frameDropped + " drops");
+            this.frameDropped = frameDropped;
         }
-        if(! (this.frameDropped == frameDropped)) {
-            fpsField.setText("FPS = " + fps);
+        if(this.fps != fps) {
+            fpsField.setText("FPS = " + dec.format(fps));
+            this.fps = fps;
         }
-        mHandler.postDelayed(this, NewFrameCallback.JANK_LIMIT_IN_NANO /1000000);
+        mHandler.postDelayed(this, NewFrameCallback.JANK_LIMIT_IN_NANO / 1000000);
     }
 
 }

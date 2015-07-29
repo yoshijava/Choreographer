@@ -15,8 +15,8 @@ public class NewFrameCallback implements FrameCallback {
     private String TAG;
     private Choreographer choreographer;
     private int droppedFrame = 0;
-    private DecimalFormat dec = new DecimalFormat("#.00");
-    private String fps;
+
+    private double fps;
 
     public NewFrameCallback() {
         TAG = NewFrameCallback.class.getName();
@@ -37,12 +37,12 @@ public class NewFrameCallback implements FrameCallback {
         else {
             Log.d(TAG, "Frame goes well");
         }
-        fps = dec.format((1000000000.0d/diff));
+        fps = 1000000000.0d/diff;
         lastUpdate = frameTimeNanos;
         choreographer.postFrameCallback(this);
     }
 
-    public String getFPS() {
+    public double getFPS() {
         return fps;
     }
 
