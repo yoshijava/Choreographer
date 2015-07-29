@@ -16,12 +16,12 @@
             android:text="Frame drops!!"
             android:textSize="26sp" android:layout_alignParentBottom="true"
             android:layout_marginBottom="74dp" android:layout_alignEnd="@+id/editText"
-            android:layout_alignStart="@+id/editText" android:editable="false"/>
+            android:layout_alignStart="@+id/editText" android:editable="false" android:inputType="none"/>
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/editText" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
-            android:layout_marginTop="42dp" android:text="MediaTek CTO" android:textSize="40dp"
-            android:editable="false"/>
+            android:layout_marginTop="42dp" android:text="MediaTek CTO" android:textSize="40sp"
+            android:editable="false" android:inputType="none"/>
 
 </RelativeLayout>
