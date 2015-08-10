@@ -18,9 +18,10 @@ public class ChoreographerTest extends Activity implements Runnable {
     private TextView dropField;
     private Handler mHandler;
     private NewFrameCallback callback;
-    private int frameDropped = 0;
+    private double frameDropped = 0;
     private double fps = 0;
     private DecimalFormat dec = new DecimalFormat("#.00");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class ChoreographerTest extends Activity implements Runnable {
     @Override
     public void run() {
         double fps = callback.getFPS();
-        int frameDropped = callback.getDroppedFrame();
+        double frameDropped = callback.getDroppedFrame();
         if( this.frameDropped == frameDropped) {
             dropField.setText(frameDropped + " drops");
             this.frameDropped = frameDropped;
@@ -68,7 +69,7 @@ public class ChoreographerTest extends Activity implements Runnable {
             fpsField.setText("FPS = " + dec.format(fps));
             this.fps = fps;
         }
-        mHandler.postDelayed(this, NewFrameCallback.JANK_LIMIT_IN_NANO / 1000000);
+        mHandler.postDelayed(this, NewFrameCallback.jankLimitInNano / 1000000);
     }
 
 }

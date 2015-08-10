@@ -6,15 +6,19 @@ package kuei.bula.myapplication;
 import android.util.Log;
 import android.view.Choreographer;
 import android.view.Choreographer.FrameCallback;
-import android.widget.Chronometer;
-import android.widget.TextView;
+
+import java.text.DecimalFormat;
 
 public class NewFrameCallback implements FrameCallback {
     private long lastUpdate = 0;
-    private final long jankLimitInNano = 16666666; // 16.67 ms for 60 fps
+    public static final long jankLimitInNano = 16666667; // 16.67 ms for 60 fps
     private String TAG;
     private Choreographer choreographer;
-    private int droppedFrame = 0;
+    //    private double droppedFrame = 0;
+    private long refreshRate = 60;
+    private double droppedFrame = 0;
+    private double fps = 0;
+
     public NewFrameCallback() {
         TAG = NewFrameCallback.class.getName();
         choreographer = Choreographer.getInstance();
@@ -23,23 +27,29 @@ public class NewFrameCallback implements FrameCallback {
 
     @Override
     public void doFrame(long frameTimeNanos) {
-        long diff = (frameTimeNanos - lastUpdate);
-        if(diff > jankLimitInNano) {
-//            Log.d(TAG, "lastUpdate = " + lastUpdate);
-//            Log.d(TAG, "frameTimeNanos = " + frameTimeNanos);
-//            Log.d(TAG, "Diff = " + diff);
-            Log.d(TAG, "Frame drops");
-            ChoreographerTest.SELF.getFrameDroppingField().setText("" + droppedFrame + " drops");
-            droppedFrame++;
+        final long startNanos = System.nanoTime();
+        final double jitterNanos = (startNanos - frameTimeNanos);
+        Log.d(TAG, "jitterNanos = " + jitterNanos);
+        if (jitterNanos >= jankLimitInNano) {
+            droppedFrame = jitterNanos / jankLimitInNano;
+            Log.d(TAG, "Dropped frame: " + droppedFrame);
         }
         else {
             Log.d(TAG, "Frame goes well");
+            droppedFrame = 0;
         }
-        String fps = "FPS = " + String.valueOf(1000000000.0d/diff).substring(0, 6);
-        Log.d(TAG, fps);
-        ChoreographerTest.SELF.getFpsField().setText(fps);
-        lastUpdate = frameTimeNanos;
+        fps = 60 - droppedFrame;
+        Log.d(TAG, "FPS = " + fps);
+//        ChoreographerTest.SELF.getFpsField().setText(fps);
         choreographer.postFrameCallback(NewFrameCallback.this);
+    }
+
+    public double getDroppedFrame() {
+        return droppedFrame;
+    }
+
+    public double getFPS() {
+        return fps;
     }
 
 }
