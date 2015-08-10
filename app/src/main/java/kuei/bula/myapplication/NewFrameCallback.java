@@ -6,47 +6,40 @@ package kuei.bula.myapplication;
 import android.util.Log;
 import android.view.Choreographer;
 import android.view.Choreographer.FrameCallback;
-
-import java.text.DecimalFormat;
+import android.widget.Chronometer;
+import android.widget.TextView;
 
 public class NewFrameCallback implements FrameCallback {
     private long lastUpdate = 0;
-    public static final long JANK_LIMIT_IN_NANO = 16666666; // 16.67 ms for 60 fps
+    private final long jankLimitInNano = 16666666; // 16.67 ms for 60 fps
     private String TAG;
     private Choreographer choreographer;
     private int droppedFrame = 0;
-
-    private double fps;
-
     public NewFrameCallback() {
         TAG = NewFrameCallback.class.getName();
         choreographer = Choreographer.getInstance();
-        choreographer.postFrameCallback(this);
+        choreographer.postFrameCallback(NewFrameCallback.this);
     }
 
     @Override
     public void doFrame(long frameTimeNanos) {
         long diff = (frameTimeNanos - lastUpdate);
-        Log.d(TAG, "lastUpdate = " + lastUpdate);
-        Log.d(TAG, "frameTimeNanos = " + frameTimeNanos);
-        Log.d(TAG, "Diff = " + diff);
-        if(diff > JANK_LIMIT_IN_NANO) {
+        if(diff > jankLimitInNano) {
+//            Log.d(TAG, "lastUpdate = " + lastUpdate);
+//            Log.d(TAG, "frameTimeNanos = " + frameTimeNanos);
+//            Log.d(TAG, "Diff = " + diff);
             Log.d(TAG, "Frame drops");
+            ChoreographerTest.SELF.getFrameDroppingField().setText("" + droppedFrame + " drops");
             droppedFrame++;
         }
         else {
             Log.d(TAG, "Frame goes well");
         }
-        fps = 1000000000.0d/diff;
+        String fps = "FPS = " + String.valueOf(1000000000.0d/diff).substring(0, 6);
+        Log.d(TAG, fps);
+        ChoreographerTest.SELF.getFpsField().setText(fps);
         lastUpdate = frameTimeNanos;
-        choreographer.postFrameCallback(this);
+        choreographer.postFrameCallback(NewFrameCallback.this);
     }
 
-    public double getFPS() {
-        return fps;
-    }
-
-    public int getDroppedFrame() {
-        return droppedFrame;
-    }
 }
